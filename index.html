@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PSIT Attendance Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-animation" id="bgAnimation">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">
+    <img src="PSIT_logo_Red.svg" alt="PSIT Logo" style="height:30px; vertical-align:middle; margin-right:8px;">
+    PSIT Attendance Calculator
+  </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#calculator">Calculator</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="calculator-wrapper">
+      <div class="calculator-container" id="calculator">
+        <h1 class="calculator-title">Calculate Your Attendance</h1>
+        
+        <div class="form-group">
+          <label class="form-label" for="absent">Total Absents</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <input type="number" id="absent" class="form-input" placeholder="Enter absent count (e.g., 5)" min="0" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="oaa">Total OAA (Other Activity Attendance)</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <input type="number" id="oaa" class="form-input" placeholder="Enter OAA days (e.g., 2)" min="0" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="lecture">Total Lectures Conducted</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <input type="number" id="lecture" class="form-input" placeholder="Enter total lectures (e.g., 60)" min="1" />
+          </div>
+        </div>
+
+        <button class="calculate-btn" onclick="calculate()">
+          <span style="position: relative; z-index: 1;">Calculate Now</span>
+        </button>
+
+        <div class="result-display" id="resultDisplay"></div>
+      </div>
+
+      <div class="stats-panel">
+        <h2 class="stats-title">Quick Stats</h2>
+        
+        <div class="stat-card">
+          <div class="stat-label">Required Attendance</div>
+          <div class="stat-value">90%</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Fine Per 1% Below</div>
+          <div class="stat-value">₹400</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Detention Risk</div>
+          <div class="stat-value" style="font-size: 1.2rem;">Below 90%</div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">
+            💡 Pro Tip
+          </div>
+          <div class="tip-content">
+            Maintain above 90% attendance to avoid fines and ensure eligibility for Pre-University exams and CT. Each 1% below 90% costs ₹400!
+          </div>
+        </div>
+
+        <div class="reward-section">
+          <h3 class="reward-title">Reward System</h3>
+          <div class="reward-card reward-platinum">
+            <div class="reward-icon">🏆</div>
+            <div class="reward-details">
+              <div class="reward-range">99% - 100%</div>
+              <div class="reward-amount">₹5,000</div>
+              <div class="reward-label">Platinum Reward</div>
+            </div>
+          </div>
+          <div class="reward-card reward-gold">
+            <div class="reward-icon">⭐</div>
+            <div class="reward-details">
+              <div class="reward-range">97% - 98.9%</div>
+              <div class="reward-amount">₹3,000</div>
+              <div class="reward-label">Gold Reward</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+<script src="script.js"></script>
+</body>
+</html>
