@@ -1127,3 +1127,152 @@
         padding: 1.1rem 1.1rem 1.1rem 3.2rem;
       }
     }
+    /* ================================
+   ORANGE-THEMED CLASSY FOOTER
+   Designed for PSIT Attendance Calculator
+================================ */
+.footer {
+  position: relative;
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 152, 0, 0.25);
+  color: #f5f5f5;
+  text-align: center;
+  padding: 3rem 1rem 2.5rem;
+  overflow: hidden;
+  box-shadow: 0 -4px 25px rgba(255, 152, 0, 0.1);
+}
+
+/* Animated glow background */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 250%;
+  height: 250%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 152, 0, 0.25),
+    rgba(255, 200, 100, 0.1),
+    rgba(255, 152, 0, 0.25)
+  );
+  animation: rotateOrange 18s linear infinite;
+  z-index: 0;
+  filter: blur(110px);
+  opacity: 0.8;
+}
+
+@keyframes rotateOrange {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.footer-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* Title */
+.footer-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  background: linear-gradient(90deg, #ff9800, #ffc107);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.8rem;
+  transition: transform 0.3s ease;
+}
+.footer-title:hover {
+  transform: scale(1.05);
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.icon {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: rgba(255, 152, 0, 0.08);
+  border: 1px solid rgba(255, 152, 0, 0.2);
+  box-shadow: 0 0 20px rgba(255, 152, 0, 0.1);
+  color: #ffb74d;
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.icon svg {
+  width: 28px;
+  height: 28px;
+  transition: all 0.4s ease;
+  filter: drop-shadow(0 0 4px rgba(255, 152, 0, 0.3));
+}
+
+.icon:hover {
+  transform: translateY(-6px) scale(1.08);
+  background: rgba(255, 152, 0, 0.15);
+  color: #ff9800;
+  box-shadow: 0 0 25px rgba(255, 152, 0, 0.45);
+}
+
+/* Specific hover glows */
+.icon.linkedin:hover { color: #0a66c2; box-shadow: 0 0 25px rgba(10,102,194,0.45); }
+.icon.github:hover { color: #fff; box-shadow: 0 0 25px rgba(255,255,255,0.25); }
+.icon.portfolio:hover { color: #ff9800; box-shadow: 0 0 25px rgba(255,152,0,0.6); }
+
+/* Footer Note */
+.footer-note {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  color: #f0f0f0;
+  letter-spacing: 0.5px;
+  margin-top: 0.8rem;
+  transition: opacity 0.3s ease;
+}
+.footer-note:hover {
+  opacity: 1;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .footer {
+    padding: 2.2rem 1rem;
+  }
+  .footer-title {
+    font-size: 1.2rem;
+  }
+  .social-icons {
+    gap: 1.5rem;
+  }
+  .icon {
+    width: 45px;
+    height: 45px;
+  }
+  .icon svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-title {
+    font-size: 1rem;
+  }
+  .footer-note {
+    font-size: 0.8rem;
+  }
+}
