@@ -56,7 +56,7 @@ If the **attendance percentage** falls below the minimum threshold of **90%**, a
 
 ![PSIT Attendance Calculator Logo](PSIT_logo_Red.svg)  
 
-*Add a screenshot or GIF of your application here.*
+![Demo](demo.png)
 
 ---
 
