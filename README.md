@@ -25,7 +25,7 @@ The **attendance percentage** is calculated based on total lectures, absences, a
 
 - **Total Lectures** – Total number of classes conducted.  
 - **Total Absent** – Number of classes the student missed.  
-- **OAA (On Academic Activity)** – Absences covered by academic activities (seminars, workshops, etc.) that **do not count** as true absence.  
+- **OAA (Other Activity Attendance)** – Absences covered by academic activities (seminars, workshops, etc.) that **do not count** as true absence.  
 - **Attendance %** – Final percentage of classes attended.
 
 ---
@@ -56,7 +56,7 @@ If the **attendance percentage** falls below the minimum threshold of **90%**, a
 
 ![PSIT Attendance Calculator Logo](PSIT_logo_Red.svg)  
 
-*Add a screenshot or GIF of your application here.*
+![Demo](demo.png)
 
 ---
 
@@ -64,4 +64,6 @@ If the **attendance percentage** falls below the minimum threshold of **90%**, a
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/yourusername/psit-attendance-calculator.git
+   git clone https://github.com/Aditya-2215/ATTENDANCE-CALCULATOR.git
+   ```
+2. Open in VS Code and run the ```index.html``` file.
