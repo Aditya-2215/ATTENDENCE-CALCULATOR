@@ -1247,6 +1247,88 @@
   opacity: 1;
 }
 
+
+
+.footer {
+  background: linear-gradient(135deg, #0d1117, #1b1f24);
+  padding: 2rem 1rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 2rem;
+}
+
+.footer-title {
+  font-size: 1.3rem;
+  color: #f97316; /* Vibrant orange tone */
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.developer-profiles {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.developer-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1rem 1.8rem;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.developer-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.dev-name {
+  color: #ffffff;
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.icon svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  transition: transform 0.2s, color 0.3s;
+}
+
+.icon.linkedin:hover svg {
+  color: #0a66c2;
+  transform: scale(1.1);
+}
+
+.icon.github:hover svg {
+  color: #9b59b6;
+  transform: scale(1.1);
+}
+
+.icon.portfolio:hover svg {
+  color: #f97316;
+  transform: scale(1.1);
+}
+
+.footer-note {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  margin-top: 1.2rem;
+}
+
+
 /* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
   .footer {
