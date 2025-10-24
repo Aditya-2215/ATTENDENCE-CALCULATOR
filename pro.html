@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PSIT Attendance Calculator - ERP Module</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-image: url('profile_bg.webp');
+  background-size: cover;        /* Makes it fill the screen */
+  background-position: center;   /* Centers it nicely */
+  background-repeat: no-repeat;  /* Prevents tiling */
+  background-attachment: fixed;  /* Keeps it fixed while scrolling */
+}
+
+    .erp-header {
+      background: linear-gradient(135deg, #d84315 0%, #bf360c 100%);
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .erp-logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .psit-logo {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: white;
+      letter-spacing: 2px;
+    }
+
+    .module-title {
+      font-size: 1rem;
+      font-weight: 500;
+      opacity: 0.95;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #d84315;
+      font-size: 1.1rem;
+    }
+
+    .breadcrumb {
+      background: white;
+      padding: 0.875rem 2rem;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.875rem;
+      color: #718096;
+    }
+
+    .breadcrumb a {
+      color: #d84315;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .breadcrumb span {
+      margin: 0 0.5rem;
+    }
+
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #e2e8f0;
+    }
+
+    .card-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .tab-navigation {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .tab-btn {
+      padding: 0.875rem 1.5rem;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #718096;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn.active {
+      color: #d84315;
+      border-bottom-color: #d84315;
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: #4a5568;
+      background: #f7fafc;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .required {
+      color: #e53e3e;
+    }
+
+    .form-input {
+      padding: 0.75rem 1rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      background: white;
+      color: #2d3748;
+      font-weight: 500;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #d84315;
+      box-shadow: 0 0 0 3px rgba(216, 67, 21, 0.1);
+    }
+
+    .form-input:disabled {
+      background: #f7fafc;
+      color: #a0aec0;
+      cursor: not-allowed;
+    }
+
+    .input-hint {
+      font-size: 0.8rem;
+      color: #a0aec0;
+      margin-top: 0.375rem;
+      font-style: italic;
+    }
+
+    .btn-primary {
+      padding: 0.875rem 1.5rem;
+      background: linear-gradient(135deg, #d84315 0%, #bf360c 100%);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 12px rgba(216, 67, 21, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(216, 67, 21, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      padding: 0.75rem 1.25rem;
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      color: #4a5568;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: #cbd5e0;
+      background: #f7fafc;
+    }
+
+    .result-container {
+      margin-top: 1.5rem;
+      display: none;
+    }
+
+    .result-container.show {
+      display: block;
+      animation: slideDown 0.4s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-card {
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .attendance-display {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .attendance-number {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .attendance-number.excellent { color: #38a169; }
+    .attendance-number.good { color: #48bb78; }
+    .attendance-number.warning { color: #ed8936; }
+    .attendance-number.danger { color: #e53e3e; }
+
+    .status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-badge.excellent { background: #c6f6d5; color: #22543d; }
+    .status-badge.good { background: #bee3f8; color: #2c5282; }
+    .status-badge.warning { background: #feebc8; color: #7c2d12; }
+    .status-badge.danger { background: #fed7d7; color: #742a2a; }
+
+    .progress-container {
+      margin: 1.5rem 0;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-bar-wrapper {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .progress-bar-fill.excellent { background: linear-gradient(90deg, #38a169, #48bb78); }
+    .progress-bar-fill.good { background: linear-gradient(90deg, #4299e1, #63b3ed); }
+    .progress-bar-fill.warning { background: linear-gradient(90deg, #ed8936, #f6ad55); }
+    .progress-bar-fill.danger { background: linear-gradient(90deg, #e53e3e, #fc8181); }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .info-item {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 3px solid #d84315;
+    }
+
+    .info-label {
+      font-size: 0.75rem;
+      color: #718096;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #2d3748;
+    }
+
+    .alert {
+      padding: 1.25rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .alert-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .alert-danger {
+      background: #fff5f5;
+      border: 1px solid #fc8181;
+      color: #742a2a;
+    }
+
+    .alert-warning {
+      background: #fffaf0;
+      border: 1px solid #f6ad55;
+      color: #7c2d12;
+    }
+
+    .alert-success {
+      background: #f0fff4;
+      border: 1px solid #68d391;
+      color: #22543d;
+    }
+
+    .alert-info {
+      background: #ebf8ff;
+      border: 1px solid #63b3ed;
+      color: #2c5282;
+    }
+
+    .alert-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .alert-content {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .stats-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .stat-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #718096;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-icon {
+      font-size: 1.75rem;
+    }
+
+    .stat-value-large {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #d84315;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-description {
+      font-size: 0.85rem;
+      color: #a0aec0;
+      font-weight: 500;
+    }
+
+    .reward-card {
+      background: linear-gradient(135deg, #fff5f0 0%, #ffe4d4 100%);
+      border: 2px solid #fbd38d;
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .reward-icon-large {
+      font-size: 2.5rem;
+    }
+
+    .reward-details {
+      flex: 1;
+    }
+
+    .reward-range {
+      font-size: 0.75rem;
+      color: #744210;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .reward-amount {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #dd6b20;
+      margin: 0.25rem 0;
+    }
+
+    .reward-label {
+      font-size: 0.8rem;
+      color: #975a16;
+      font-weight: 600;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .detailed-breakdown {
+      background: white;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .breakdown-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.9rem;
+    }
+
+    .breakdown-row:last-child {
+      border-bottom: none;
+      padding-top: 1rem;
+      margin-top: 0.5rem;
+      border-top: 2px solid #d84315;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .breakdown-label {
+      color: #718096;
+    }
+
+    .breakdown-value {
+      font-weight: 700;
+      color: #2d3748;
+    }
+
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-sidebar {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .erp-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .module-title {
+        border-left: none;
+        border-top: 2px solid rgba(255,255,255,0.3);
+        padding-left: 0;
+        padding-top: 0.75rem;
+      }
+
+      .main-container {
+        padding: 1rem;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-sidebar {
+        grid-template-columns: 1fr;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .attendance-number {
+        font-size: 2.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tab-navigation {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .tab-btn {
+        border-bottom: 1px solid #e2e8f0;
+        border-left: 3px solid transparent;
+      }
+
+      .tab-btn.active {
+        border-bottom-color: #e2e8f0;
+        border-left-color: #d84315;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="erp-header">
+    <div class="erp-logo">
+      <div class="psit-logo">PSIT</div>
+      <div class="module-title">Attendance Calculator</div>
+    </div>
+  </header>
+
+  
+
+  <main class="main-container">
+    <div class="dashboard-grid">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="card-icon">📊</span>
+              Attendance Calculator
+            </div>
+            <button class="btn-secondary" onclick="resetCalculator()">
+              🔄 Reset
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="tab-navigation">
+              <button class="tab-btn active" onclick="switchTab('check')">
+                <span>📈</span> Check Attendance
+              </button>
+              <button class="tab-btn" onclick="switchTab('plan')">
+                <span>🎯</span> Plan Lectures
+              </button>
+            </div>
+
+            <!-- Check Attendance Tab -->
+            <div id="checkTab" class="tab-content active">
+              <form class="form-grid" onsubmit="calculateAttendance(event)">
+                <div class="form-group">
+                  <label class="form-label">
+                    ❌ Total Absents <span class="required">*</span>
+                  </label>
+                  <input type="number" id="absents" class="form-input" placeholder="Enter number of absents" min="0" required />
+                  <div class="input-hint">Number of lectures you were absent for</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">
+                    ✅ Other Activity Attendance (OAA)
+                  </label>
+                  <input type="number" id="oaa" class="form-input" placeholder="Enter OAA count" min="0" value="0" />
+                  <div class="input-hint">Attendance credited for extracurricular activities</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">
+                    📚 Total Lectures Conducted <span class="required">*</span>
+                  </label>
+                  <input type="number" id="totalLectures" class="form-input" placeholder="Enter total lectures" min="1" required />
+                  <div class="input-hint">Total number of lectures held so far</div>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                  <span>🧮</span> Calculate Attendance
+                </button>
+              </form>
+
+              <div class="result-container" id="checkResult"></div>
+            </div>
+
+            <!-- Plan Lectures Tab -->
+            <div id="planTab" class="tab-content">
+              <form class="form-grid" onsubmit="calculatePlan(event)">
+                <div class="form-group">
+                  <label class="form-label">
+                    📈 Current Attendance (%) <span class="required">*</span>
+                  </label>
+                  <input type="number" id="currentPercent" class="form-input" placeholder="Enter current attendance %" min="0" max="100" step="0.01" required />
+                  <div class="input-hint">Your current attendance percentage</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">
+                    📚 Total Lectures So Far <span class="required">*</span>
+                  </label>
+                  <input type="number" id="lecturesCount" class="form-input" placeholder="Enter total lectures" min="1" required />
+                  <div class="input-hint">Total lectures conducted till now</div>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                  <span>🎯</span> Calculate Skippable Lectures
+                </button>
+              </form>
+
+              <div class="result-container" id="planResult"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="stats-sidebar">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-title">Required Minimum</div>
+            <div class="stat-icon">⚠️</div>
+          </div>
+          <div class="stat-value-large">90%</div>
+          <div class="stat-description">Mandatory attendance requirement</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-title">Fine Structure</div>
+            <div class="stat-icon">💰</div>
+          </div>
+          <div class="stat-value-large">₹400</div>
+          <div class="stat-description">Per 1% below requirement</div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="card-icon">🏆</span>
+              Reward System
+            </div>
+          </div>
+          <div class="card-body" style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="reward-card" style="background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%); border-color: #f9e79f;">
+              <div class="reward-icon-large">🥇</div>
+              <div class="reward-details">
+                <div class="reward-range">99% - 100%</div>
+                <div class="reward-amount">₹5,000</div>
+                <div class="reward-label">Platinum Reward</div>
+              </div>
+            </div>
+
+            <div class="reward-card" style="background: linear-gradient(135deg, #fef9e7 0%, #fcf3cf 100%); border-color: #f7dc6f;">
+              <div class="reward-icon-large">⭐</div>
+              <div class="reward-details">
+                <div class="reward-range">97% - 98.9%</div>
+                <div class="reward-amount">₹3,000</div>
+                <div class="reward-label">Gold Reward</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <div class="alert-icon">💡</div>
+          <div>
+            <div class="alert-title">Pro Tip</div>
+            <div class="alert-content">
+              Use the "Plan Lectures" tab to strategically manage your attendance and stay above the 90% threshold.
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    function switchTab(tab) {
+      const checkTab = document.getElementById('checkTab');
+      const planTab = document.getElementById('planTab');
+      const buttons = document.querySelectorAll('.tab-btn');
+      
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      if (tab === 'check') {
+        checkTab.classList.add('active');
+        planTab.classList.remove('active');
+        buttons[0].classList.add('active');
+      } else {
+        planTab.classList.add('active');
+        checkTab.classList.remove('active');
+        buttons[1].classList.add('active');
+      }
+    }
+
+    function resetCalculator() {
+      document.querySelectorAll('.form-input').forEach(input => input.value = '');
+      document.getElementById('oaa').value = '0';
+      document.querySelectorAll('.result-container').forEach(container => {
+        container.classList.remove('show');
+      });
+    }
+
+    function getAttendanceStatus(percent) {
+      if (percent >= 97) return { class: 'excellent', label: 'Excellent', icon: '🎉' };
+      if (percent >= 93) return { class: 'good', label: 'Good', icon: '✅' };
+      if (percent >= 90) return { class: 'warning', label: 'Warning', icon: '⚠️' };
+      return { class: 'danger', label: 'Critical', icon: '🚨' };
+    }
+
+    function calculateAttendance(event) {
+      event.preventDefault();
+      
+      const absents = parseInt(document.getElementById('absents').value) || 0;
+      const oaa = parseInt(document.getElementById('oaa').value) || 0;
+      const totalLectures = parseInt(document.getElementById('totalLectures').value) || 0;
+      const resultDiv = document.getElementById('checkResult');
+
+      if (absents > totalLectures) {
+        resultDiv.innerHTML = `
+          <div class="alert alert-danger">
+            <div class="alert-icon">❌</div>
+            <div>
+              <div class="alert-title">Invalid Input</div>
+              <div class="alert-content">Absents cannot exceed total lectures conducted.</div>
+            </div>
+          </div>
+        `;
+        resultDiv.classList.add('show');
+        return;
+      }
+
+      const attendancePercent = 100 - (((absents - oaa) / totalLectures) * 100);
+      const status = getAttendanceStatus(attendancePercent);
+      const attended = totalLectures - absents + oaa;
+
+      let alertContent = '';
+      let rewardContent = '';
+      
+      if (attendancePercent < 90) {
+        const percentBelow = 90 - attendancePercent;
+        const fineAmount = Math.ceil(percentBelow) * 400;
+        const classesNeeded = Math.ceil((0.10 * totalLectures - (oaa - absents)) / 0.90);
+        
+        alertContent = `
+          <div class="alert alert-danger">
+            <div class="alert-icon">💸</div>
+            <div style="flex: 1;">
+              <div class="alert-title">Fine Applicable</div>
+              <div class="alert-content">
+                You're ${percentBelow.toFixed(2)}% below the requirement. Fine: <strong>₹${fineAmount.toLocaleString('en-IN')}</strong>
+              </div>
+              <div class="detailed-breakdown" style="margin-top: 1rem;">
+                <div class="breakdown-title">📋 Recovery Plan</div>
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Percentage Below 90%</span>
+                  <span class="breakdown-value">${percentBelow.toFixed(2)}%</span>
+                </div>
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Consecutive Classes Needed</span>
+                  <span class="breakdown-value">${classesNeeded}</span>
+                </div>
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Total Fine Amount</span>
+                  <span class="breakdown-value" style="color: #e53e3e;">₹${fineAmount.toLocaleString('en-IN')}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-warning" style="margin-top: 1rem;">
+            <div class="alert-icon">⚠️</div>
+            <div>
+              <div class="alert-title">Detention Risk</div>
+              <div class="alert-content">Below 90% attendance may result in detention from Pre-University and CT exams.</div>
+            </div>
+          </div>
+        `;
+      } else {
+        const currentPresent = attended;
+        let maxSkippable = 0;
+        
+        for (let skip = 1; skip <= 50; skip++) {
+          const newTotal = totalLectures + skip;
+          const newAttendance = 100 - (((absents + skip - oaa) / newTotal) * 100);
+          
+          if (newAttendance >= 90) {
+            maxSkippable = skip;
+          } else {
+            break;
+          }
+        }
+        
+        if (maxSkippable > 0) {
+          const futurePercent = 100 - (((absents + maxSkippable - oaa) / (totalLectures + maxSkippable)) * 100);
+          alertContent = `
+            <div class="alert alert-success">
+              <div class="alert-icon">🎯</div>
+              <div style="flex: 1;">
+                <div class="alert-title">Safe Zone Analysis</div>
+                <div class="alert-content">
+                  You can skip up to <strong>${maxSkippable}</strong> ${maxSkippable === 1 ? 'lecture' : 'lectures'} and still maintain 90% attendance.
+                </div>
+                <div class="detailed-breakdown" style="margin-top: 1rem;">
+                  <div class="breakdown-title">📊 Skip Projection</div>
+                  <div class="breakdown-row">
+                    <span class="breakdown-label">Maximum Skippable Lectures</span>
+                    <span class="breakdown-value">${maxSkippable}</span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span class="breakdown-label">Attendance After Skipping</span>
+                    <span class="breakdown-value">${futurePercent.toFixed(2)}%</span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span class="breakdown-label">Safety Buffer</span>
+                    <span class="breakdown-value" style="color: #38a169;">${(futurePercent - 90).toFixed(2)}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          alertContent = `
+            <div class="alert alert-warning">
+              <div class="alert-icon">⚠️</div>
+              <div>
+                <div class="alert-title">Critical Threshold</div>
+                <div class="alert-content">You're at the exact minimum. Skipping even 1 lecture will drop you below 90%!</div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      if (attendancePercent >= 99) {
+        rewardContent = `
+          <div class="alert alert-success" style="margin-top: 1rem; background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%); border-color: #f9e79f;">
+            <div class="alert-icon">🏆</div>
+            <div>
+              <div class="alert-title" style="color: #7d6608;">Platinum Reward Earned!</div>
+              <div class="alert-content" style="color: #7d6608;">
+                Congratulations! You've earned the <strong>₹5,000</strong> Platinum Reward for exceptional attendance.
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (attendancePercent >= 97) {
+        const toPlat = (99 - attendancePercent).toFixed(2);
+        rewardContent = `
+          <div class="alert alert-success" style="margin-top: 1rem; background: linear-gradient(135deg, #fef9e7 0%, #fcf3cf 100%); border-color: #f7dc6f;">
+            <div class="alert-icon">⭐</div>
+            <div>
+              <div class="alert-title" style="color: #7d6608;">Gold Reward Earned!</div>
+              <div class="alert-content" style="color: #7d6608;">
+                Great job! You've earned the <strong>₹3,000</strong> Gold Reward. Just ${toPlat}% away from Platinum!
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      resultDiv.innerHTML = `
+        <div class="result-card">
+          <div class="result-header">
+            <div class="attendance-display">
+              <div class="attendance-number ${status.class}">${attendancePercent.toFixed(2)}%</div>
+              <div>
+                <div class="status-badge ${status.class}">${status.icon} ${status.label}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-label">
+              <span>Attendance Progress</span>
+              <span>${attendancePercent.toFixed(2)}% / 90%</span>
+            </div>
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar-fill ${status.class}" style="width: ${Math.min(attendancePercent, 100)}%"></div>
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Total Lectures</div>
+              <div class="info-value">${totalLectures}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Attended</div>
+              <div class="info-value">${attended}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Absents</div>
+              <div class="info-value">${absents}</div>
+            </div>
+          </div>
+        </div>
+
+        ${alertContent}
+        ${rewardContent}
+
+        <div class="action-buttons">
+          <button class="btn-primary" onclick="window.print()" style="flex: 1;">
+            <span>🖨️</span> Print Report
+          </button>
+          <button class="btn-secondary" onclick="resetCalculator()" style="flex: 1;">
+            <span>🔄</span> Calculate Again
+          </button>
+        </div>
+      `;
+      
+      resultDiv.classList.add('show');
+    }
+
+    function calculatePlan(event) {
+      event.preventDefault();
+      
+      const currentPercent = parseFloat(document.getElementById('currentPercent').value) || 0;
+      const lecturesCount = parseInt(document.getElementById('lecturesCount').value) || 0;
+      const resultDiv = document.getElementById('planResult');
+
+      if (currentPercent < 0 || currentPercent > 100) {
+        resultDiv.innerHTML = `
+          <div class="alert alert-danger">
+            <div class="alert-icon">❌</div>
+            <div>
+              <div class="alert-title">Invalid Input</div>
+              <div class="alert-content">Attendance percentage must be between 0% and 100%.</div>
+            </div>
+          </div>
+        `;
+        resultDiv.classList.add('show');
+        return;
+      }
+
+      const status = getAttendanceStatus(currentPercent);
+      const currentAbsentPercent = 100 - currentPercent;
+      const effectiveAbsents = (currentAbsentPercent * lecturesCount) / 100;
+
+      if (currentPercent < 90) {
+        const percentBelow = 90 - currentPercent;
+        const fineAmount = Math.ceil(percentBelow) * 400;
+        const classesNeeded = Math.ceil((0.10 * lecturesCount - effectiveAbsents) / 0.90);
+
+        resultDiv.innerHTML = `
+          <div class="result-card">
+            <div class="result-header">
+              <div class="attendance-display">
+                <div class="attendance-number danger">${currentPercent.toFixed(2)}%</div>
+                <div>
+                  <div class="status-badge danger">🚨 Below Requirement</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="progress-container">
+              <div class="progress-label">
+                <span>Current Status</span>
+                <span>${currentPercent.toFixed(2)}% / 90%</span>
+              </div>
+              <div class="progress-bar-wrapper">
+                <div class="progress-bar-fill danger" style="width: ${currentPercent}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-danger">
+            <div class="alert-icon">⚠️</div>
+            <div style="flex: 1;">
+              <div class="alert-title">Cannot Skip Any Lectures</div>
+              <div class="alert-content">
+                Your attendance is below the 90% requirement. You must attend all upcoming lectures.
+              </div>
+              <div class="detailed-breakdown" style="margin-top: 1rem;">
+                <div class="breakdown-title">📋 Recovery Requirements</div>
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Current Fine Status</span>
+                  <span class="breakdown-value" style="color: #e53e3e;">₹${fineAmount.toLocaleString('en-IN')}</span>
+                </div>
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Percentage Below 90%</span>
+                  <span class="breakdown-value">${percentBelow.toFixed(2)}%</span>
+                </div>
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Consecutive Classes to Attend</span>
+                  <span class="breakdown-value" style="color: #38a169;">${classesNeeded}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1rem;">
+            <div class="alert-icon">💡</div>
+            <div>
+              <div class="alert-title">Action Plan</div>
+              <div class="alert-content">
+                Attend the next ${classesNeeded} consecutive lectures without any absences to reach 90% attendance and avoid fines.
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        let maxSkippable = 0;
+        let futureAttendance = currentPercent;
+
+        for (let skip = 1; skip <= 50; skip++) {
+          const newTotal = lecturesCount + skip;
+          const newAttendance = 100 - (((effectiveAbsents + skip) / newTotal) * 100);
+          
+          if (newAttendance >= 90) {
+            maxSkippable = skip;
+            futureAttendance = newAttendance;
+          } else {
+            break;
+          }
+        }
+
+        const safetyBuffer = futureAttendance - 90;
+        let rewardWarning = '';
+
+        if (currentPercent >= 97 && futureAttendance < 97) {
+          const rewardType = currentPercent >= 99 ? 'Platinum (99%)' : 'Gold (97%)';
+          const rewardAmount = currentPercent >= 99 ? '₹5,000' : '₹3,000';
+          rewardWarning = `
+            <div class="alert alert-warning" style="margin-top: 1rem;">
+              <div class="alert-icon">⚠️</div>
+              <div>
+                <div class="alert-title">Reward Impact Warning</div>
+                <div class="alert-content">
+                  Skipping ${maxSkippable} ${maxSkippable === 1 ? 'lecture' : 'lectures'} will drop you below the ${rewardType} threshold, potentially costing you ${rewardAmount} in rewards!
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (maxSkippable > 0) {
+          resultDiv.innerHTML = `
+            <div class="result-card">
+              <div class="result-header">
+                <div class="attendance-display">
+                  <div class="attendance-number ${status.class}">${currentPercent.toFixed(2)}%</div>
+                  <div>
+                    <div class="status-badge ${status.class}">${status.icon} ${status.label}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="progress-container">
+                <div class="progress-label">
+                  <span>Current Attendance</span>
+                  <span>${currentPercent.toFixed(2)}% / 90%</span>
+                </div>
+                <div class="progress-bar-wrapper">
+                  <div class="progress-bar-fill ${status.class}" style="width: ${currentPercent}%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-success">
+              <div class="alert-icon">🎯</div>
+              <div style="flex: 1;">
+                <div class="alert-title">Skippable Lectures Analysis</div>
+                <div class="alert-content">
+                  You can skip up to <strong>${maxSkippable}</strong> ${maxSkippable === 1 ? 'lecture' : 'lectures'} while maintaining the 90% requirement.
+                </div>
+                <div class="detailed-breakdown" style="margin-top: 1rem;">
+                  <div class="breakdown-title">📊 Projection Details</div>
+                  <div class="breakdown-row">
+                    <span class="breakdown-label">Current Lectures Conducted</span>
+                    <span class="breakdown-value">${lecturesCount}</span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span class="breakdown-label">Maximum Skippable</span>
+                    <span class="breakdown-value">${maxSkippable}</span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span class="breakdown-label">Future Attendance</span>
+                    <span class="breakdown-value">${futureAttendance.toFixed(2)}%</span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span class="breakdown-label">Safety Buffer Above 90%</span>
+                    <span class="breakdown-value" style="color: #38a169;">${safetyBuffer.toFixed(2)}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            ${rewardWarning}
+
+            <div class="alert alert-info" style="margin-top: 1rem;">
+              <div class="alert-icon">💡</div>
+              <div>
+                <div class="alert-title">Strategic Recommendation</div>
+                <div class="alert-content">
+                  While you can skip ${maxSkippable} ${maxSkippable === 1 ? 'lecture' : 'lectures'}, it's recommended to maintain a buffer above 90% to account for unexpected circumstances.
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          resultDiv.innerHTML = `
+            <div class="result-card">
+              <div class="result-header">
+                <div class="attendance-display">
+                  <div class="attendance-number warning">${currentPercent.toFixed(2)}%</div>
+                  <div>
+                    <div class="status-badge warning">⚠️ Critical Zone</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="progress-container">
+                <div class="progress-label">
+                  <span>Current Attendance</span>
+                  <span>${currentPercent.toFixed(2)}% / 90%</span>
+                </div>
+                <div class="progress-bar-wrapper">
+                  <div class="progress-bar-fill warning" style="width: ${currentPercent}%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-warning">
+              <div class="alert-icon">⚠️</div>
+              <div>
+                <div class="alert-title">Exact Threshold Reached</div>
+                <div class="alert-content">
+                  You're at exactly 90% attendance. Skipping even <strong>1 lecture</strong> will drop you below the requirement and result in fines!
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 1rem;">
+              <div class="alert-icon">🎯</div>
+              <div>
+                <div class="alert-title">Recommendation</div>
+                <div class="alert-content">
+                  Attend all upcoming lectures to build a safety buffer above 90%. This will give you flexibility for unavoidable absences.
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+      
+      resultDiv.classList.add('show');
+    }
+  </script>
+</body>
+</html>

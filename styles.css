@@ -6,7 +6,8 @@
 
     body {
       font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 50%, #feca57 100%);
+      
+      background-image: url('profile_bg.webp');
       color: #2d3436;
       min-height: 100vh;
       overflow-x: hidden;
@@ -100,7 +101,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+      background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 50%, #f7931e 100%);
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
       z-index: 1000;
       transition: all 0.3s ease;
