@@ -17,9 +17,7 @@ A simple and **user-friendly Attendance Calculator** for PSIT students. This too
 
 The **attendance percentage** is calculated based on total lectures, absences, and any OAA credits as follows:
 
-\[
-\text{Attendance \%} = 100 - \left( \frac{\text{Total Absent} - \text{OAA}}{\text{Total Lectures}} \times 100 \right)
-\]
+attendancePercent = 100 - (((absent - oaa) / lecture) * 100)
 
 ### Explanation:
 
