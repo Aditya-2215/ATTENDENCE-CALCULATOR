@@ -347,8 +347,8 @@ function displayResults(resultDisplay, data) {
       skipHTML = `
         <div class="skip-calculator-section">
           <div class="skip-header">
-            <div class="skip-icon">🎯</div>
-            <div class="skip-title">SAFE ZONE</div>
+            <div class="skip-icon"></div>
+            <div class="skip-title">YOUR SAFE ZONE</div>
           </div>
           <div class="skip-content">
             <div class="skip-main-stat">
